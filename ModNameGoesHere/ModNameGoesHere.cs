@@ -24,6 +24,16 @@ namespace ModNameGoesHere
         [AutoRegisterConfigKey]
         public static ModConfigurationKey<string> cloudVarPath = new ModConfigurationKey<string>("cloud_Var_Path", "Cloud Variable Path to write to", () => "speech-recognition.string");
 
+        //
+        // Creating your own "speech-recognition.string" cloud variable needs 4 commands sent to the Neos Bot
+        // https://wiki.neos.com/Cloud_Variables#User_Color
+        // 
+        // createUserVar speech-recognition.string
+        // setUserVarType speech-recognition.string string
+        // setUserVarPerms speech-recognition.string read variable_owner_unsafe
+        // setUserVarPerms speech-recognition.string write variable_owner
+        //
+
         private static CloudVariableManager cloudVariableManager;
         private static CloudVariableIdentity cloudVariableIdentity;
         private static CloudVariableProxy cloudVariableProxy;
