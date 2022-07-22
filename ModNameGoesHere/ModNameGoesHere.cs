@@ -1,28 +1,25 @@
-﻿using BaseX;
+﻿using FrooxEngine;
 using CloudX.Shared;
-using FrooxEngine;
 using HarmonyLib;
 using NeosModLoader;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Speech.Recognition;
 
-namespace ModNameGoesHere
+namespace VoiceCommands
 {
-    public class ModNameGoesHere : NeosMod
+    public class VoiceCommands : NeosMod
     {
-        public override string Name => "ModNameGoesHere";
+        public override string Name => "VoiceCommands";
         public override string Author => "dfgHiatus";
         public override string Version => "1.0.0";
-        public override string Link => "https://github.com/GithubUsername/RepoName/";
+        public override string Link => "hhttps://github.com/dfgHiatus/NeosVoiceRecognition";
 
         public static ModConfiguration config;
         [AutoRegisterConfigKey]
         public static ModConfigurationKey<bool> enabled = new ModConfigurationKey<bool>("enabled", "Use Voice Recognition", () => true);
         [AutoRegisterConfigKey]
-        public static ModConfigurationKey<string> cloudVarPath = new ModConfigurationKey<string>("cloud_Var_Path", "Cloud Variable Path to write to", () => "speech-recognition.string");
+        public static ModConfigurationKey<string> cloudVarPath = new ModConfigurationKey<string>("cloud_Var_Path", "Cloud variable path to write to", () => "speech-recognition.string");
 
         //
         // Creating your own "speech-recognition.string" cloud variable needs 4 commands sent to the Neos Bot
@@ -77,7 +74,7 @@ namespace ModNameGoesHere
 
         private void UpdateCloudPath(ConfigurationChangedEvent configurationChangedEvent)
         {
-            if (configurationChangedEvent.Key.Name == "cloud_Var_Path")
+            if (configurationChangedEvent.Key.Name == cloudVarPath.Name) // "cloud_Var_Path"
             {
                 cloudVariableIdentity = new CloudVariableIdentity(Engine.Current.Cloud.CurrentUser.Id, config.GetValue(cloudVarPath));
                 // cloudVariableProxy = new CloudVariableProxy(cloudVariableIdentity, cloudVariableManager); ?
@@ -88,8 +85,7 @@ namespace ModNameGoesHere
         {
             var newLocale = Settings.ReadValue<string>("Interface.Locale", null) ?? "en-US";
             Debug($"Changing speech recognition for {Engine.Current.GetLocaleNativeName(newLocale)}. Loaded {newLocale} locale");
-            // TODO See if we need to pass a body into this
-            recognizer = new SpeechRecognitionEngine(new CultureInfo(newLocale));
+            recognizer = new SpeechRecognitionEngine(new CultureInfo(newLocale)); // TODO See if we need to pass a body into this
         }
 
         private static void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
