@@ -19,7 +19,7 @@ namespace VoiceCommands
         [AutoRegisterConfigKey]
         public static ModConfigurationKey<bool> enabled = new ModConfigurationKey<bool>("enabled", "Use Voice Recognition", () => true);
         [AutoRegisterConfigKey]
-        public static ModConfigurationKey<bool> useConfidence = new ModConfigurationKey<bool>("useConfidence", "Use Voice Confidence threshold", () => false);
+        public static ModConfigurationKey<bool> useConfidence = new ModConfigurationKey<bool>("use_Confidence", "Use Voice Confidence threshold", () => false);
         [AutoRegisterConfigKey]
         public static ModConfigurationKey<float> confidence = new ModConfigurationKey<float>("confidence", "Confidence threshold", () => 0.75f);
         [AutoRegisterConfigKey]
