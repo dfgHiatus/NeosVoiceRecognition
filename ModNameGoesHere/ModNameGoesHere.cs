@@ -19,6 +19,10 @@ namespace VoiceCommands
         [AutoRegisterConfigKey]
         public static ModConfigurationKey<bool> enabled = new ModConfigurationKey<bool>("enabled", "Use Voice Recognition", () => true);
         [AutoRegisterConfigKey]
+        public static ModConfigurationKey<bool> useConfidence = new ModConfigurationKey<bool>("useConfidence", "Use Voice Confidence threshold", () => false);
+        [AutoRegisterConfigKey]
+        public static ModConfigurationKey<float> confidence = new ModConfigurationKey<float>("confidence", "Confidence threshold", () => 0.75f);
+        [AutoRegisterConfigKey]
         public static ModConfigurationKey<string> cloudVarPath = new ModConfigurationKey<string>("cloud_Var_Path", "Cloud variable path to write to", () => "speech-recognition.string");
 
         //
@@ -91,7 +95,18 @@ namespace VoiceCommands
         private static void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             Debug("Recognized text: " + e.Result.Text);
-            cloudVariableProxy.WriteToCloud();
+            
+            if (config.GetValue(useConfidence))
+            {
+                if (e.Result.Confidence >= config.GetValue(confidence))
+                {
+                    cloudVariableProxy.WriteToCloud();
+                }
+            }
+            else
+            {
+                cloudVariableProxy.WriteToCloud();
+            }
         }
     }
 }
