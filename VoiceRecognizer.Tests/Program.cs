@@ -10,7 +10,7 @@ namespace SampleRecognition
     {
         public static void Main(string[] args)
         {
-            // Not working. In addition to needing Core 3.1, this requires a WPF, not cross platform.
+            // Not working. In addition to needing Core 3.1 (.NET 5+ is NOT an option), this requires a WPF, not cross platform.
             // var winSpeech = new WindowsMediaRecognizer();
             // winSpeech.Initiallize();
 
