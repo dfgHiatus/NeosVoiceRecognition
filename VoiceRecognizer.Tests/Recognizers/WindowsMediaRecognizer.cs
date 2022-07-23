@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 // Install Windows.Media.SpeechRecognition to test
 // using Windows.Media.SpeechRecognition;
 
-namespace VoiceRecognizer.Tests.Windows
+namespace VoiceRecognizer.Tests.Recognizers
 {
     public class WindowsMediaRecognizer : ISpeechRecognizer
     {
@@ -28,7 +28,7 @@ namespace VoiceRecognizer.Tests.Windows
             this.useConfidence = useConfidence;
             this.confidence = confidence;
             this.cloudVarPath = cloudVarPath;
-            this.latestPhrase = string.Empty;
+            latestPhrase = string.Empty;
         }
 
         public void Initialize()

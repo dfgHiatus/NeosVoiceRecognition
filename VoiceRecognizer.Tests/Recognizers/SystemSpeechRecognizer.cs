@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Speech.Recognition;
 
-namespace VoiceRecognizer.Tests.System
+namespace VoiceRecognizer.Tests.Recognizers
 {
     public class SystemSpeechRecognizer : ISpeechRecognizer
     {
@@ -27,7 +27,7 @@ namespace VoiceRecognizer.Tests.System
             this.useConfidence = useConfidence;
             this.confidence = confidence;
             this.cloudVarPath = cloudVarPath;
-            this.latestPhrase = string.Empty;
+            latestPhrase = string.Empty;
         }
 
         public void Initialize()

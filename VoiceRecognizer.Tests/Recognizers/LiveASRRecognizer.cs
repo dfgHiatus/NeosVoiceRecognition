@@ -4,7 +4,7 @@ using System.Net.WebSockets;
 using VoiceRecognizer.Tests.Websockets;
 using WebSocketSharp.Server;
 
-namespace VoiceRecognizer.Tests.LiveASR
+namespace VoiceRecognizer.Tests.Recognizers
 {
     public class LiveASRRecognizer : ISpeechRecognizer
     {
@@ -35,7 +35,7 @@ namespace VoiceRecognizer.Tests.LiveASR
             this.useConfidence = useConfidence;
             this.confidence = confidence;
             this.cloudVarPath = cloudVarPath;
-            this.latestPhrase = string.Empty;
+            latestPhrase = string.Empty;
         }
 
         public void Initialize()
@@ -86,7 +86,7 @@ namespace VoiceRecognizer.Tests.LiveASR
 
         public void Update() { }
 
-        public void Teardown() 
+        public void Teardown()
         {
             nc.Stop();
             process?.Close();

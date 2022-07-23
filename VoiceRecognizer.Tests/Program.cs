@@ -1,9 +1,4 @@
-﻿using System;
-using System.Speech.Recognition;
-using VoiceRecognizer.Tests;
-using VoiceRecognizer.Tests.LiveASR;
-using VoiceRecognizer.Tests.System;
-using VoiceRecognizer.Tests.Windows;
+﻿using VoiceRecognizer.Tests.Recognizers;
 
 namespace SampleRecognition
 {
@@ -19,7 +14,7 @@ namespace SampleRecognition
             // var systemSpeech = new SystemSpeechRecognizer();
             // systemSpeech.Initialize();
 
-            // Gaming
+            // Gaming :eyes:
             var liveASR = new LiveASRRecognizer();
             liveASR.Initialize();
         }
