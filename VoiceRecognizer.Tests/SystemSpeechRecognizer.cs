@@ -10,12 +10,15 @@ namespace VoiceRecognizer.Tests.System
         public float confidence { get; set; }
         public string? cloudVarPath { get; set; }
 
+        public string latestPhrase { get; set; }
+
         public SystemSpeechRecognizer()
         {
             enabled = true;
             useConfidence = false;
             confidence = 0.75f;
             cloudVarPath = null;
+            latestPhrase = string.Empty;
         }
 
         public SystemSpeechRecognizer(bool enabled, bool useConfidence, float confidence, string? cloudVarPath)
@@ -24,9 +27,10 @@ namespace VoiceRecognizer.Tests.System
             this.useConfidence = useConfidence;
             this.confidence = confidence;
             this.cloudVarPath = cloudVarPath;
+            this.latestPhrase = string.Empty;
         }
 
-        public void Initiallize()
+        public void Initialize()
         {
             using (SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine())
             {
@@ -73,6 +77,8 @@ namespace VoiceRecognizer.Tests.System
                 Console.ReadLine();
             }
         }
+
+        public void Update() { }
 
         public void Teardown() { }
 
