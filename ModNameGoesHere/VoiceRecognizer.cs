@@ -13,7 +13,7 @@ namespace VoiceCommands
         public override string Name => "VoiceCommands";
         public override string Author => "dfgHiatus";
         public override string Version => "1.0.0";
-        public override string Link => "hhttps://github.com/dfgHiatus/NeosVoiceRecognition";
+        public override string Link => "https://github.com/dfgHiatus/NeosVoiceRecognition";
 
         public static ModConfiguration config;
         [AutoRegisterConfigKey]
@@ -46,13 +46,15 @@ namespace VoiceCommands
             {
                 Warn("Voice recognition is currently unavailable for non-Windows operating systems");
             }
-
-            Engine.Current.RunPostInit(() => InitSpeechRecognizer());
-            Engine.Current.RunPostInit(() => InitCloudInterface());
-            Engine.Current.LocalesUpdated += UpdateLocale;
-            config = GetConfiguration();
-            config.OnThisConfigurationChanged += UpdateCloudPath;
-            new Harmony("net.dfgHiatus.Template").PatchAll();
+            else
+            {
+                Engine.Current.RunPostInit(() => InitSpeechRecognizer());
+                Engine.Current.RunPostInit(() => InitCloudInterface());
+                Engine.Current.LocalesUpdated += UpdateLocale;
+                config = GetConfiguration();
+                config.OnThisConfigurationChanged += UpdateCloudPath;
+                new Harmony("net.dfgHiatus.VoiceCommands").PatchAll();
+            }
         }
 
         private void InitSpeechRecognizer()
@@ -82,6 +84,17 @@ namespace VoiceCommands
             {
                 cloudVariableIdentity = new CloudVariableIdentity(Engine.Current.Cloud.CurrentUser.Id, config.GetValue(cloudVarPath));
                 // cloudVariableProxy = new CloudVariableProxy(cloudVariableIdentity, cloudVariableManager); ?
+            }
+            else if (configurationChangedEvent.Key.Name == enabled.Name) // "enabled"
+            {
+                if (config.GetValue(enabled))
+                {
+                    recognizer.RecognizeAsync(RecognizeMode.Multiple);
+                }
+                else
+                {
+                    recognizer.RecognizeAsyncStop();
+                }
             }
         }
 
