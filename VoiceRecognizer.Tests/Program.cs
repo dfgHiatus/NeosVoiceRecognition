@@ -10,11 +10,13 @@ namespace SampleRecognition
     {
         public static void Main(string[] args)
         {
-            var winSpeech = new WindowsMediaRecognizer();
-            winSpeech.Initiallize();
+            // Not working. In addition to needing Core 3.1, this requires a WPF, not cross platform.
+            // var winSpeech = new WindowsMediaRecognizer();
+            // winSpeech.Initiallize();
 
-            // var systemSpeech = new SystemSpeechRecognizer();
-            // systemSpeech.Initiallize();
+            // Shoddy. According to SO, this hasn't been updated since Vista/7. Also not cross platform.
+            var systemSpeech = new SystemSpeechRecognizer();
+            systemSpeech.Initiallize();
         }
     }
 }
