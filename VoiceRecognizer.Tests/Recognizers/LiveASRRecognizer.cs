@@ -52,7 +52,6 @@ namespace VoiceRecognizer.Tests.Recognizers
             process.StartInfo.Arguments = string.Join(" ", new string[] { "-u", args });
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.CreateNoWindow = true;
             process.OutputDataReceived += OnOutput;
             process.Exited += OnClose;
