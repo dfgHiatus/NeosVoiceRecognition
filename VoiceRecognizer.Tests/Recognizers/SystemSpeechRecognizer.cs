@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Speech.Recognition;
+using VoiceRecognizer.Tests.Websockets;
 
 namespace VoiceRecognizer.Tests.Recognizers
 {
@@ -9,8 +10,9 @@ namespace VoiceRecognizer.Tests.Recognizers
         public bool useConfidence { get; set; }
         public float confidence { get; set; }
         public string? cloudVarPath { get; set; }
-
         public string latestPhrase { get; set; }
+
+        private NetworkClass nc;
 
         public SystemSpeechRecognizer()
         {
@@ -32,69 +34,41 @@ namespace VoiceRecognizer.Tests.Recognizers
 
         public void Initialize()
         {
-            using (SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine())
+            nc = new NetworkClass();
+            using ( SpeechRecognitionEngine recognizer =  new SpeechRecognitionEngine(new System.Globalization.CultureInfo("en-US")))
             {
-                // Create SemanticResultValue objects that contain cities and airport codes.  
-                SemanticResultValue chicago = new SemanticResultValue("Chicago", "ORD");
-                SemanticResultValue boston = new SemanticResultValue("Boston", "BOS");
-                SemanticResultValue miami = new SemanticResultValue("Miami", "MIA");
-                SemanticResultValue dallas = new SemanticResultValue("Dallas", "DFW");
+                // Create and load a dictation grammar.  
+                recognizer.LoadGrammar(new DictationGrammar());
 
-                // Create a Choices object and add the SemanticResultValue objects, using  
-                // implicit conversion from SemanticResultValue to GrammarBuilder  
-                Choices cities = new Choices();
-                cities.Add(new Choices(new GrammarBuilder[] { chicago, boston, miami, dallas }));
-
-                // Build the phrase and add SemanticResultKeys.  
-                GrammarBuilder chooseCities = new GrammarBuilder();
-                chooseCities.Append("I want to fly from");
-                chooseCities.Append(new SemanticResultKey("origin", cities));
-                chooseCities.Append("to");
-                chooseCities.Append(new SemanticResultKey("destination", cities));
-
-                // Build a Grammar object from the GrammarBuilder.  
-                Grammar bookFlight = new Grammar(chooseCities);
-                bookFlight.Name = "Book Flight";
-
-                // Add a handler for the LoadGrammarCompleted event.  
-                recognizer.LoadGrammarCompleted +=
-                  new EventHandler<LoadGrammarCompletedEventArgs>(recognizer_LoadGrammarCompleted);
-
-                // Add a handler for the SpeechRecognized event.  
+                // Add a handler for the speech recognized event.  
                 recognizer.SpeechRecognized +=
-                  new EventHandler<SpeechRecognizedEventArgs>(recognizer_SpeechRecognized);
+                    new EventHandler<SpeechRecognizedEventArgs>(recognizer_SpeechRecognized);
 
-                // Load the grammar object to the recognizer.  
-                recognizer.LoadGrammarAsync(bookFlight);
-
-                // Set the input to the recognizer.  
+                // Configure input to the speech recognizer.  
                 recognizer.SetInputToDefaultAudioDevice();
 
-                // Start recognition.  
-                recognizer.RecognizeAsync();
+                // Start asynchronous, continuous speech recognition.  
+                recognizer.RecognizeAsync(RecognizeMode.Multiple);
 
                 // Keep the console window open.  
-                Console.ReadLine();
+                while (true)
+                {
+                    Console.ReadLine();
+                }
             }
+        }
+
+        private void recognizer_SpeechRecognized(object? sender, SpeechRecognizedEventArgs e)
+        {
+            latestPhrase = e.Result.Text;
+            nc.buffer = latestPhrase;
+            nc.broadcastData();
+            Console.WriteLine(latestPhrase);
+            Console.WriteLine("");
         }
 
         public void Update() { }
 
-        public void Teardown() { }
-
-        private void recognizer_LoadGrammarCompleted(object sender, LoadGrammarCompletedEventArgs e)
-        {
-            Console.WriteLine("Grammar loaded: " + e.Grammar.Name);
-            Console.WriteLine();
-        }
-
-        private void recognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
-        {
-            Console.WriteLine("Speech recognized:  " + e.Result.Text);
-            Console.WriteLine();
-            Console.WriteLine("Semantic results:");
-            Console.WriteLine("  The flight origin is " + e.Result.Semantics["origin"].Value);
-            Console.WriteLine("  The flight destination is " + e.Result.Semantics["destination"].Value);
-        }
+        public void Teardown() => nc.Stop();
     }
 }
