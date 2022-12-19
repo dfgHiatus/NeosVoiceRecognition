@@ -18,13 +18,13 @@ namespace VoiceRecognizer.Tests.Websockets
                 { IgnoreExtensions = true });
             server.Start();
 
-            Console.WriteLine("Server started");
+            Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss") + "] " + "Server started");
         }
 
         public void broadcastData()
         {
             server.WebSocketServices["/"].Sessions.Broadcast(buffer);
-            Console.WriteLine("Send Message:");
+            Console.WriteLine("[" + DateTime.Now.ToString("HH:mm:ss") + "] " + "Message:");
         }
 
         public void Stop()
