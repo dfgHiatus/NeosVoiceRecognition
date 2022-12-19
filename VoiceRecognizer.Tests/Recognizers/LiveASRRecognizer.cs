@@ -42,6 +42,7 @@ namespace VoiceRecognizer.Tests.Recognizers
         public void Initialize()
         {
             nc = new NetworkClass();
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(TeardownProxy);
             run_cmd(cmd, args);
             Console.WriteLine($"[" + DateTime.Now.ToString("HH:mm:ss") + "] " + "Ready");
         }
@@ -94,6 +95,11 @@ namespace VoiceRecognizer.Tests.Recognizers
         }
 
         public void Update() { }
+
+        private void TeardownProxy(object? sender, EventArgs e)
+        {
+            Teardown();
+        }
 
         public void Teardown()
         {
